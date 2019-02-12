@@ -58,6 +58,30 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // add event listener to listen for keydown
+  window.addEventListener('keydown', playSound);
+
+  // call playSound() on the keydown
+  function playSound(e) {
+    // using back tics so I can inject variables
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return; // stop the function if the key doesn't have a sound
+
+    audio.currentTime = 0; // rewinds the sound to the start so you can press key multiple times
+    audio.play();
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; // skip it if not a transform
+    this.classList.remove('playing');
+  }
+
+  // keys is an array, so need to cycle through each key and add the event listener
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
 
 </script>
 
